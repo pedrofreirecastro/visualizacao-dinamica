@@ -1,0 +1,307 @@
+*MEDIDAS PRINCIPAIS*
+
+pedidos_enviados = 
+CALCULATE(
+    DISTINCTCOUNT(
+        superstore_sales[Order ID]
+    ), 
+    USERELATIONSHIP(
+        dCalendar[Date],
+        superstore_sales[Ship Date]
+    ))
+
+pedidos_recebidos = 
+CALCULATE(
+    DISTINCTCOUNT(
+        superstore_sales[Order ID]
+    ), 
+    USERELATIONSHIP(
+        dCalendar[Date],
+        superstore_sales[Order Date]
+    ))
+
+qtd_clientes = 
+CALCULATE(
+    DISTINCTCOUNT(
+        superstore_sales[Customer ID]
+    ),
+    USERELATIONSHIP(
+        dCalendar[Date],
+        superstore_sales[Ship Date]
+    )
+)
+
+ticket_medio = 
+CALCULATE(
+    DIVIDE(
+        SUM(
+            orders_superstore_sales[Order Value]
+        ),
+        DISTINCTCOUNT(
+            orders_superstore_sales[Order ID]
+        )),
+    USERELATIONSHIP(
+        dCalendar[Date],
+        orders_superstore_sales[Ship Date]
+    )
+)
+
+ticket_medio_por_cliente = 
+CALCULATE(
+    DIVIDE(
+        SUM(
+            orders_superstore_sales[Order Value]
+        ),
+        DISTINCTCOUNT(
+            superstore_sales[Customer ID]
+        )),
+    USERELATIONSHIP(
+        dCalendar[Date],
+        orders_superstore_sales[Ship Date]
+    )
+)
+
+valor_vendas = 
+CALCULATE(
+    CALCULATE(
+        SUM(
+            superstore_sales[Sales]
+        ),
+        USERELATIONSHIP(
+            dCalendar[Date],
+            superstore_sales[Ship Date]
+        )))
+
+*MEDIDAS DINÂMICAS 1*
+
+pedidos_enviados_dinamico = 
+IF(
+    SELECTEDVALUE( 'Tabela para filtro'[Filtro] ) = "Pedidos enviados",
+    [pedidos_enviados]
+)
+
+pedidos_recebidos_dinamico = 
+IF(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ) = "Pedidos recebidos",
+    [pedidos_recebidos]
+)
+
+qtd_clientes_dinamico = 
+IF(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ) = "Quantidade de clientes",
+    [qtd_clientes]
+)
+
+ticket_medio_dinamico = 
+IF(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ) = "Ticket médio",
+    [ticket_medio]
+)
+
+ticket_medio_por_cliente_dinamico = 
+IF(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ) = "Ticket médio por cliente",
+    [ticket_medio_por_cliente]
+)
+
+medida_geral = 
+SWITCH(
+    SELECTEDVALUE('Tabela para filtro'[Filtro]),
+    "Limpar", BLANK(),
+    "Pedidos enviados", [pedidos_enviados],
+    "Pedidos recebidos", [pedidos_recebidos],
+    "Quantidade de clientes", [qtd_clientes],
+    "Ticket médio", [ticket_medio],
+    "Ticket médio por cliente", [ticket_medio_por_cliente],
+    "Valor das vendas", [valor_vendas]
+)
+
+medida_geral_2 = 
+SWITCH(
+    SELECTEDVALUE('Tabela para filtro colunas'[Filtro]),
+    "Limpar", BLANK(),
+    "Pedidos enviados", [pedidos_enviados],
+    "Pedidos recebidos", [pedidos_recebidos],
+    "Quantidade de clientes", [qtd_clientes],
+    "Ticket médio", [ticket_medio],
+    "Ticket médio por cliente", [ticket_medio_por_cliente],
+    "Valor das vendas", [valor_vendas]
+)
+
+*MEDIDAS DINÂMICAS 2*
+
+pedidos_enviados_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Pedidos enviados") = TRUE(),
+    [pedidos_enviados]
+)
+
+pedidos_recebidos_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Pedidos recebidos") = TRUE(),
+    [pedidos_recebidos]
+)
+
+qtd_clientes_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Quantidade de clientes") = TRUE(),
+    [qtd_clientes]
+)
+
+ticket_medio_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Ticket médio") = TRUE(),
+    [ticket_medio]
+)
+
+ticket_medio_por_cliente_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Ticket médio por cliente") = TRUE(),
+    [ticket_medio_por_cliente]
+)
+
+valor_vendas_dinamico_2 = 
+IF(
+    CONTAINS('Tabela para filtro','Tabela para filtro'[Filtro], "Valor das vendas") = TRUE(),
+    [valor_vendas]
+)
+
+*MEDIDAS DINÂMICAS 3*
+
+pedidos_enviados_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Pedidos enviados") = TRUE(),
+    [pedidos_enviados]
+)
+
+pedidos_recebidos_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Pedidos recebidos") = TRUE(),
+    [pedidos_recebidos]
+)
+
+qtd_clientes_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Quantidade de clientes") = TRUE(),
+    [qtd_clientes]
+)
+
+ticket_medio_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Ticket médio") = TRUE(),
+    [ticket_medio]
+)
+
+ticket_medio_por_cliente_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Ticket médio por cliente") = TRUE(),
+    [ticket_medio_por_cliente]
+)
+
+valor_vendas_dinamico_3 = 
+IF(
+    CONTAINS('Tabela para filtro colunas','Tabela para filtro colunas'[Filtro], "Valor das vendas") = TRUE(),
+    [valor_vendas]
+)
+
+*TÍTULOS*
+
+Título = 
+CONCATENATE(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ), 
+    " por período"
+)
+
+Título Estado-Cidade = 
+CONCATENATE(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ), 
+    " por Estado / Cidade"
+)
+
+Título método de envio = 
+CONCATENATE(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ), 
+    " por método de envio"
+)
+
+Título segmento = 
+CONCATENATE(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ), 
+    " por segmento"
+)
+
+Título subcategoria = 
+CONCATENATE(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ), 
+    " por sub-categoria"
+)
+
+valor_vendas_dinamico = 
+IF(
+    SELECTEDVALUE(
+        'Tabela para filtro'[Filtro]
+    ) = "Valor das vendas",
+    [valor_vendas]
+)
+
+Título 2 = 
+CONCATENATE (
+    CONCATENATEX ( 'Tabela para filtro', 'Tabela para filtro'[Filtro], " - " ),
+    " por período"
+)
+
+Título 3 = 
+CONCATENATE (
+    CONCATENATEX ( 
+        'Tabela para filtro', 
+        'Tabela para filtro'[Filtro], 
+        " - " 
+    ),
+    CONCATENATE(
+        CONCATENATE(
+            " x ",
+            CONCATENATEX(
+                'Tabela para filtro colunas', 
+                'Tabela para filtro colunas'[Filtro],
+                " - "
+            )
+        ),
+    " por período"
+))
+
+Título 4 = 
+CONCATENATE (
+    CONCATENATEX ( 
+        'Tabela para filtro', 
+        'Tabela para filtro'[Filtro], 
+        " - " 
+    ),
+    CONCATENATE(
+        CONCATENATE(
+            " x ",
+            CONCATENATEX(
+                'Tabela para filtro colunas', 
+                'Tabela para filtro colunas'[Filtro],
+                " - "
+            )
+        ),
+    " por segmento"
+))
